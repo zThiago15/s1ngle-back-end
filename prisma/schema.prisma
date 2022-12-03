@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id Int @id @default(autoincrement())
+  name String
+  email String
+  password String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  @@map("clients")
+}
+
+model Artist {
+  id Int @id @default(autoincrement())
+  name String
+  artistic_name String
+  specialty String
+  email String
+  password String
+  telephone String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  artProducts ArtProduct[]
+  @@map("artists")
+}
+
+model ArtProduct {
+  id Int @id @default(autoincrement())
+  name String
+  img String
+  price String
+
+  artist Artist @relation(fields: [artist_id], references: [id]) // An art can have one artist
+  artist_id Int
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  @@map("art_products")
+}
