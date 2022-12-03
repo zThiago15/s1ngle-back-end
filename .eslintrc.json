@@ -11,5 +11,7 @@
         "sourceType": "module"
     },
     "rules": {
+        "sort-imports":"off",
     }
 }
+
