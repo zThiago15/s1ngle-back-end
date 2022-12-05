@@ -13,7 +13,7 @@ datasource db {
 model Client {
   id Int @id @default(autoincrement())
   name String
-  email String
+  email String @unique
   password String
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
@@ -26,7 +26,7 @@ model Artist {
   name String
   artistic_name String
   specialty String
-  email String
+  email String @unique
   password String
   telephone String
   created_at DateTime @default(now())
