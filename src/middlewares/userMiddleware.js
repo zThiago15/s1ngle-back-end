@@ -1,10 +1,22 @@
-const verifyRegisterArtistFields = (req, res, next) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return next({ message: 'Error: Email and password fields required!', status: 400 });
+const verifyRegisterFieldsArtist = (req, res, next) => {
+  const {
+    email, password, artisticName, specialty, telephone,
+  } = req.body;
+
+  if (!email || !password || !artisticName || !specialty || !telephone) {
+    return next({ message: 'Error: Required fields are missing!', status: 400 });
   }
 
-  next();
+  const regexEmail = /\S+@\S+\.\S+/;
+  if (!regexEmail.test(email)) {
+    return next({ message: 'Error: Invalid e-mail', status: 400 });
+  }
+
+  if (password.length < 8) {
+    return next({ message: 'Error: Password must have at least 8 characters', status: 400 });
+  }
+
+  return next();
 };
 
-export default verifyRegisterArtistFields;
+export default verifyRegisterFieldsArtist;

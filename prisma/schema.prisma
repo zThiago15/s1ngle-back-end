@@ -15,8 +15,8 @@ model Client {
   name String
   email String @unique
   password String
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
 
   @@map("clients")
 }
@@ -24,13 +24,13 @@ model Client {
 model Artist {
   id Int @id @default(autoincrement())
   name String
-  artistic_name String
+  artisticName String @map("artistic_name")
   specialty String
   email String @unique
   password String
   telephone String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   artProducts ArtProduct[]
   @@map("artists")
@@ -42,10 +42,10 @@ model ArtProduct {
   img String
   price String
 
-  artist Artist @relation(fields: [artist_id], references: [id]) // An art can have one artist
-  artist_id Int
+  artist Artist @relation(fields: [artistId], references: [id]) // An art can have one artist
+  artistId Int @map("artist_id")
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
   @@map("art_products")
 }
