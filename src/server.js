@@ -11,3 +11,5 @@ const { PORT } = process.env;
 app.listen(PORT, () => {
   console.info(`Listening at port ${PORT}`);
 });
+
+export default app;
