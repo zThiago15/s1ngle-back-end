@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import createUser from '../controllers/userController.js';
+import createUser, { login } from '../controllers/userController.js';
 
 import verifyRegisterArtistFields,
 { validateUser, validateUserDoesNotExist, verifyLoginFields } from '../middlewares/userMiddleware.js';
@@ -12,6 +12,6 @@ userRoutes.post(
   validateUserDoesNotExist,
   createUser,
 );
-userRoutes.post('/login', verifyLoginFields, validateUser);
+userRoutes.post('/login', verifyLoginFields, validateUser, login);
 
 export default userRoutes;

@@ -45,7 +45,7 @@ export const verifyLoginFields = (req, res, next) => {
     next({ message: 'Error: E-mail and password are required!', status: 400 });
   }
 
-  const response = validateEmailAndPassword(email, password);
+  const response = validateEmailAndPassword({ email, password });
   if (response.message) {
     next(response);
   }
@@ -62,6 +62,9 @@ export const validateUser = async (req, res, next) => {
   if (!userClient && !userArtist) {
     return next({ message: 'Error: User not found', status: 404 });
   }
+
+  const user = userClient || userArtist;
+  req.user = user;
 
   return next();
 };

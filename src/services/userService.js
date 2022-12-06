@@ -22,4 +22,12 @@ const createUser = async (user) => {
   return token;
 };
 
+export const loginUser = async (userData) => {
+  const { email } = userData;
+
+  const token = generateToken({ email });
+
+  return token;
+};
+
 export default createUser;
