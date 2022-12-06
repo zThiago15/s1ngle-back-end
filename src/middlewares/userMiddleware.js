@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { decodeToken } from '../utils/token';
 
 const prisma = new PrismaClient();
 
@@ -65,6 +66,25 @@ export const validateUser = async (req, res, next) => {
 
   const user = userClient || userArtist;
   req.user = user;
+
+  return next();
+};
+
+export const validateToken = async (req, res, next) => {
+  const { authorization } = req.header;
+
+  if (!authorization) {
+    return next({ message: 'Error: Token not found', status: 401 });
+  }
+
+  const { email } = decodeToken(authorization);
+
+  const userClient = await prisma.client.findUnique({ where: { email } });
+  const userArtist = await prisma.artist.findUnique({ where: { email } });
+
+  if (!userClient || !userArtist) {
+    return next({ message: 'Error: User from token not found' });
+  }
 
   return next();
 };
