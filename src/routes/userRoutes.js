@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import createUser from '../controllers/userController.js';
 
-import verifyRegisterFieldsArtist from '../middlewares/userMiddleware.js';
+import verifyRegisterFieldsArtist, { validateUserDoesNotExist } from '../middlewares/userMiddleware.js';
 
 const userRoutes = Router();
 
@@ -9,6 +9,7 @@ const userRoutes = Router();
 userRoutes.post(
   '/register-artist',
   verifyRegisterFieldsArtist,
+  validateUserDoesNotExist,
   createUser,
 );
 // userRoutes.get('/login', login);

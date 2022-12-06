@@ -1,3 +1,8 @@
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
+
+const prisma = new PrismaClient();
+
 const verifyRegisterFieldsArtist = (req, res, next) => {
   const {
     email, password, artisticName, specialty, telephone,
@@ -17,6 +22,17 @@ const verifyRegisterFieldsArtist = (req, res, next) => {
   }
 
   return next();
+};
+
+export const validateUserDoesNotExist = async (req, res, next) => {
+  const { email } = req.body;
+  const userFound = await prisma.artist.findUnique({ where: { email } });
+
+  if (userFound) {
+    return next({ message: 'Error: User already exists! Make login instead', status: 400 });
+  }
+
+  next();
 };
 
 export default verifyRegisterFieldsArtist;
