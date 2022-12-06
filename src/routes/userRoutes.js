@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import createUser from '../controllers/userController.js';
 
-import verifyRegisterArtistFields, { validateUserDoesNotExist } from '../middlewares/userMiddleware.js';
+import verifyRegisterArtistFields,
+{ validateUser, validateUserDoesNotExist, verifyLoginFields } from '../middlewares/userMiddleware.js';
 
 const userRoutes = Router();
 
@@ -11,6 +12,6 @@ userRoutes.post(
   validateUserDoesNotExist,
   createUser,
 );
-// userRoutes.get('/login', login);
+userRoutes.post('/login', verifyLoginFields, validateUser);
 
 export default userRoutes;
