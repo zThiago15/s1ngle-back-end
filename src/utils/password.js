@@ -13,4 +13,4 @@ export const checkPassword = (password, hash) => {
   return validPassword;
 };
 
-export default cryptPassword();
+export default cryptPassword;

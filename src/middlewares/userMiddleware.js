@@ -1,14 +1,13 @@
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
-const verifyRegisterFieldsArtist = (req, res, next) => {
+const verifyRegisterArtistFields = (req, res, next) => {
   const {
-    email, password, artisticName, specialty, telephone,
+    email, password, name, artisticName, specialty, telephone,
   } = req.body;
 
-  if (!email || !password || !artisticName || !specialty || !telephone) {
+  if (!email || !password || !artisticName || !specialty || !telephone || !name) {
     return next({ message: 'Error: Required fields are missing!', status: 400 });
   }
 
@@ -32,7 +31,7 @@ export const validateUserDoesNotExist = async (req, res, next) => {
     return next({ message: 'Error: User already exists! Make login instead', status: 400 });
   }
 
-  next();
+  return next();
 };
 
-export default verifyRegisterFieldsArtist;
+export default verifyRegisterArtistFields;
