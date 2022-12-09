@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { decodeToken } from '../utils/token';
+import { checkPassword } from '../utils/password.js';
+import { decodeToken } from '../utils/token.js';
 
 const prisma = new PrismaClient();
 
@@ -23,6 +24,11 @@ const verifyRegisterArtistFields = (req, res, next) => {
 
   if (!email || !password || !artisticName || !specialty || !telephone || !name) {
     return next({ message: 'Error: Required fields are missing!', status: 400 });
+  }
+
+  const response = validateEmailAndPassword({ email, password });
+  if (response.message) {
+    next(response);
   }
 
   return next();
@@ -55,13 +61,22 @@ export const verifyLoginFields = (req, res, next) => {
 };
 
 export const validateUser = async (req, res, next) => {
-  const { email } = req.body;
+  const { email, password } = req.body;
 
-  const userClient = await prisma.artist.findUnique({ where: { email } });
-  const userArtist = await prisma.client.findUnique({ where: { email } });
+  const userArtist = await prisma.client.findFirst({ where: { email } });
+  const userClient = await prisma.artist.findFirst({ where: { email } });
 
   if (!userClient && !userArtist) {
     return next({ message: 'Error: User not found', status: 404 });
+  }
+
+  const { password: artistHash } = userArtist;
+  const { password: clientHash } = userClient;
+
+  const validArtist = checkPassword(password, artistHash);
+  const validClient = checkPassword(password, clientHash);
+  if (!validArtist || validClient) {
+    return next({ message: 'Error: Invalid fields', status: 400 });
   }
 
   const user = userClient || userArtist;
@@ -83,7 +98,7 @@ export const validateToken = async (req, res, next) => {
   const userArtist = await prisma.artist.findUnique({ where: { email } });
 
   if (!userClient || !userArtist) {
-    return next({ message: 'Error: User from token not found' });
+    return next({ message: 'Error: User from token not found', status: 401 });
   }
 
   return next();
